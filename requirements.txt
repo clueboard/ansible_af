@@ -1,4 +1,0 @@
-ansible
-flask
-flask-sqlalchemy
-jinja2

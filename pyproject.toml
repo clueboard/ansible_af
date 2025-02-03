@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ansible_af"
+version = "0.1.0"
+description = "Ansible Armbian Firstboot Server"
+authors = [
+    { name="Zach White", email="skullydazed@gmail.com" }
+]
+dependencies = [
+    "ansible",
+    "flask",
+    "flask-sqlalchemy",
+    "gunicorn",
+    "jinja2",
+    "milc",
+]
+
+[tool.setuptools]
+packages = ["ansible_af"]
+
+[project.scripts]
+ansible-af-dhcp-helper = "ansible_af.dhcp_helper:cli"
+ansible-af-runner = "ansible_af.runner:cli"
+ansible-af-gunicorn = "ansible_af.gunicorn:cli"
