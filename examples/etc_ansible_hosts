@@ -1,0 +1,47 @@
+kcontrol:
+  hosts:
+    control.cluster01.example.com:
+      cluster_mac: "6c:1f:f7:19:fe:43"
+      cluster_ip: 10.10.20.1
+      ethernet_mac: "2c:cf:67:84:09:f1"
+      ethernet_ip: 10.10.22.2
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    cluster_cidr_length: 23
+    cluster_netmask: 255.255.254.0
+    ethernet_gw: 10.10.20.1
+    ethernet_dns: [10.10.20.1]
+    ethernet_cidr_length: 23
+    ethernet_netmask: 255.255.254.0
+
+knodes:
+  hosts:
+    node01.cluster01.frop.org:
+      ethernet_mac: c0:74:2b:fd:ea:29
+      ethernet_ip: 10.10.20.11
+      storage_mac: c0:74:2b:fd:ea:28
+      storage_ip: 10.10.18.1
+    node02.cluster01.frop.org:
+      ethernet_mac: c0:74:2b:fd:8a:ff
+      ethernet_ip: 10.10.20.12
+      storage_mac: c0:74:2b:fd:8a:fe
+      storage_ip: 10.10.18.2
+    node03.cluster01.frop.org:
+      ethernet_mac: c0:74:2b:fd:e4:ae
+      ethernet_ip: 10.10.20.13
+      storage_mac: c0:74:2b:fd:e4:af
+      storage_ip: 10.10.18.3
+    node04.cluster01.frop.org:
+      ethernet_mac: c0:74:2b:fd:af:fb
+      ethernet_ip: 10.10.20.14
+      storage_mac: c0:74:2b:fd:af:fa
+      storage_ip: 10.10.18.4
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    ethernet_gw: 10.10.20.1
+    ethernet_dns: [10.10.20.1]
+    ethernet_cidr_length: 23
+    ethernet_netmask: 255.255.254.0
+    storage_mtu: 9000
+    storage_cidr_length: 23
+    storage_netmask: 255.255.254.0

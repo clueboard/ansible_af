@@ -1,0 +1,28 @@
+---
+- name: Configure Netplan on worker nodes
+  hosts: workers
+  become: true
+  tasks:
+    - name: Remove existing Netplan files
+      file:
+        path: /etc/netplan/
+        state: absent
+
+    - name: Recreate Netplan directory
+      file:
+        path: /etc/netplan/
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Generate Netplan configuration
+      template:
+        src: netplan_knode.yaml.j2
+        dest: /etc/netplan/01-netcfg.yaml
+        owner: root
+        group: root
+        mode: '0600'
+
+    - name: Apply Netplan configuration
+      command: netplan apply
