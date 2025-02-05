@@ -2,8 +2,7 @@ from ansible.parsing.dataloader import DataLoader
 from ansible.inventory.manager import InventoryManager
 from ansible.vars.manager import VariableManager
 
-# Path to your Ansible inventory file
-inventory_path = "/etc/ansible/hosts"
+from .config import inventory_path
 
 # Load the inventory
 loader = DataLoader()

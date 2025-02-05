@@ -13,25 +13,47 @@ db = SQLAlchemy(app)
 class Hosts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ip = db.Column(db.String(256), unique=True, nullable=False)
+    hostname = db.Column(db.String(256), unique=True, nullable=True)
     macaddr = db.Column(db.String(17), unique=True, nullable=True)
-    registered_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
-    registration_complete = db.Column(db.Boolean, default=False, nullable=False)
+    playbook = db.Column(db.String(256), nullable=True)
+    registered_at = db.Column(db.DateTime, nullable=True)
+    playbook_complete = db.Column(db.Boolean, default=False, nullable=False)
 
     def __repr__(self):
-        return f"Hosts('{self.id}', '{self.ip}', '{self.macaddr}', '{self.registered_at}', '{self.registration_complete}')"  # noqa
+        return f"Hosts('{self.id}', '{self.ip}', '{self.macaddr}', '{self.playbook}', '{self.registered_at}', '{self.playbook_complete}')"  # noqa
 
 
-def upsert_host(ip):
+def get_random_row():
+    """Fetches a single row. Despite the name, entropy of this function is very low.
+    """
+    return Hosts.query.limit(1).first()
+
+
+def upsert_host(ip, macaddr=None, hostname=None, playbook=None, register=False):
+    """Add or update a host.
+    """
     existing_host = Hosts.query.filter_by(ip=ip).first()
 
     if existing_host:
-        existing_host.registered_at = datetime.utcnow()
-        existing_host.registration_complete = False
+        existing_host.registered_at = datetime.utcnow() if register else None
+        existing_host.playbook_complete = False
+
+        if macaddr:
+            existing_host.macaddr = macaddr
+
+        if playbook:
+            existing_host.playbook = playbook
+
+        if hostname:
+            existing_host.hostname = hostname
+
         db.session.commit()
         app.logger.info("Updated record for %s", ip)
 
     else:
-        new_host = Hosts(ip=ip)
+        new_host = Hosts(ip=ip, macaddr=macaddr, playbook=playbook)
+        new_host.registered_at = datetime.utcnow() if register else None
+
         db.session.add(new_host)
         db.session.commit()
         app.logger.info("Created record for %s", ip)

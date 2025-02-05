@@ -1,7 +1,7 @@
 from milc import cli
 
 from .flask_app import app
-from .db import db, Hosts
+from .db import upsert_host
 
 
 @cli.argument('hostname', nargs='?', arg_only=True, help='Hostname for the client, if known')
@@ -14,21 +14,7 @@ def main(cli):
         return
 
     with app.app_context():
-        host = Hosts.query.filter(Hosts.ip == cli.args.ip_addr).first()
-
-        if host:
-            host.macaddr = cli.args.mac_addr
-            host.registered_at = None
-
-            db.session.commit()
-            cli.log.info("Updated record for %s", cli.args.ip_addr)
-
-        else:
-            host = Hosts(ip=cli.args.ip_addr, macaddr=cli.args.mac_addr, registered_at=None)
-
-            db.session.add(host)
-            db.session.commit()
-            cli.log.info("Added record for %s", cli.args.ip_addr)
+        upsert_host(ip=cli.args.ip_addr, macaddr=cli.args.mac_addr)
 
 
 if __name__ == "__main__":
