@@ -24,16 +24,16 @@ def main(cli):
                     'ansible-playbook',
                     '-i', inventory_path,
                     '-l', host.hostname,
-                    '/etc/ansible/playbooks/armbian_first_boot.yaml',
+                    full_playbook_path,
                 )
+                playbook_result = cli.run(playbook_args, capture_output=False)
 
-                cli.run(playbook_args, capture_output=False)
+                if playbook_result.returncode == 0:
+                    # Mark the host as complete
+                    host.playbook_complete = True
 
-                # Mark the host as complete
-                host.playbook_complete = True
-
-                db.session.commit()
-                app.logger.info("Marked %s as completed", host)
+                    db.session.commit()
+                    app.logger.info("Marked %s as completed", host)
 
             if not cli.args.loop:
                 break
