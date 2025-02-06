@@ -48,7 +48,7 @@ def upsert_host(ip, macaddr=None, hostname=None, playbook=None, register=False):
             existing_host.hostname = hostname
 
         db.session.commit()
-        app.logger.info("Updated record for %s", ip)
+        app.logger.info('Updated record for %s', ip)
 
     else:
         new_host = Hosts(ip=ip, macaddr=macaddr, playbook=playbook)
@@ -56,7 +56,7 @@ def upsert_host(ip, macaddr=None, hostname=None, playbook=None, register=False):
 
         db.session.add(new_host)
         db.session.commit()
-        app.logger.info("Created record for %s", ip)
+        app.logger.info('Created record for %s', ip)
 
 
 # Create the database tables

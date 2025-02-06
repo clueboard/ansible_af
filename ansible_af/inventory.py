@@ -30,28 +30,28 @@ def find_host_by_name(hostname):
 
 if __name__ == '__main__':
     # Access variables for a specific ip
-    ip = "172.16.20.11"
+    ip = '172.16.20.11'
     host = find_host_by_ip(ip)
 
     print('hrm', host)
     if host:
-        print(f"Variables for {host['inventory_hostname']}:")
+        print(f'Variables for {host["inventory_hostname"]}:')
 
         for key, value in host.items():
-            print(f"  {key}: {value}")
+            print(f'  {key}: {value}')
 
     else:
-        print(f"\nIP {ip} not found in inventory!")
+        print(f'\nIP {ip} not found in inventory!')
 
     # Access variables for a specific hostname
     hostname = 'orange02.cluster01.frop.org'
     host = find_host_by_name(hostname)
 
     if host:
-        print(f"\nVariables for {host['inventory_hostname']}:")
+        print(f'\nVariables for {host["inventory_hostname"]}:')
 
         for key, value in host.items():
-            print(f"  {key}: {value}")
+            print(f'  {key}: {value}')
 
     else:
-        print(f"\nHost {hostname} not found in inventory!")
+        print(f'\nHost {hostname} not found in inventory!')

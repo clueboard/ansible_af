@@ -35,27 +35,27 @@ def is_render_permitted(filename):
     return False
 
 
-@app.route("/")
+@app.route('/')
 def home():
-    return "https://github.com/clueboard/ansible_af"
+    return 'https://github.com/clueboard/ansible_af'
 
 
-@app.route("/readiness_probe")
+@app.route('/readiness_probe')
 def readiness_probe():
     if not os.path.exists(inventory_path):
-        app.logger.error("Ansible inventory not found!")
+        app.logger.error('Ansible inventory not found!')
         abort(500)
 
     if not os.path.exists(template_dir):
-        app.logger.error("Ansible template directory not found!")
+        app.logger.error('Ansible template directory not found!')
         abort(500)
 
     get_random_row()
 
-    return "Ready to serve!"
+    return 'Ready to serve!'
 
 
-@app.route("/register/<playbook>")
+@app.route('/register/<playbook>')
 def register_first_boot(playbook):
     client_ip = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
     host = find_host_by_ip(client_ip)

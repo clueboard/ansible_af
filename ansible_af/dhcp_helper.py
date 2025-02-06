@@ -8,7 +8,7 @@ from .db import upsert_host
 @cli.argument('ip_addr', arg_only=True, help='IP Address')
 @cli.argument('mac_addr', arg_only=True, help='Ethernet Hardware Mac Address')
 @cli.argument('action', arg_only=True, help='add, del, old')
-@cli.entrypoint("Register a DHCP host")
+@cli.entrypoint('Register a DHCP host')
 def main(cli):
     if cli.args.action == 'del':
         return
@@ -17,5 +17,5 @@ def main(cli):
         upsert_host(ip=cli.args.ip_addr, macaddr=cli.args.mac_addr)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     cli()

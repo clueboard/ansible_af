@@ -8,14 +8,17 @@ import gunicorn.app.wsgiapp
 @cli.argument('-w', '--workers', type=int, default=4, help='The number of gunicorn workers to start. Default: 4')
 @cli.argument('-p', '--port', type=int, default=5000, help='The port to listen on. Default: 5000')
 @cli.argument('-l', '--listen', default='0.0.0.0', help='The IP to listen on. Default: 0.0.0.0')
-@cli.entrypoint("Run ansible af using gunicorn.")
+@cli.entrypoint('Run ansible af using gunicorn.')
 def main(cli):
     # ugly hack :(
     sys.argv = [
-        "gunicorn",
-        "-b", f"{cli.args.listen}:{cli.args.port}",
-        "-w", str(cli.args.workers),
-        "-k", str(cli.args.worker_class),
-        "ansible_af:app"
+        'gunicorn',
+        '-b',
+        f'{cli.args.listen}:{cli.args.port}',
+        '-w',
+        str(cli.args.workers),
+        '-k',
+        str(cli.args.worker_class),
+        'ansible_af:app',
     ]
     gunicorn.app.wsgiapp.run()
