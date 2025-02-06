@@ -2,7 +2,7 @@ import os
 from flask import abort, request
 from jinja2 import Environment, FileSystemLoader
 
-from .config import allow_dynamic_hosts, allowlist, denylist, inventory_path, template_dir
+from .config import allowlist, denylist, inventory_path, template_dir
 from .db import get_random_row, upsert_host
 from .flask_app import app
 from .inventory import find_host_by_ip

@@ -1,9 +1,10 @@
+from datetime import datetime, timedelta
 from time import sleep
 
 from milc import cli
 
 from .flask_app import app
-from .config import inventory_path, playbook_path
+from .config import host_prep_wait_time, inventory_path, playbook_path
 from .db import db, Hosts
 
 
@@ -15,11 +16,12 @@ def main(cli):
             host = Hosts.query.filter(
                 Hosts.registered_at.isnot(None),
                 Hosts.playbook_complete.isnot(True),
+                Hosts.registered_at < datetime.utcnow() - timedelta(seconds=host_prep_wait_time),
             ).order_by(Hosts.registered_at.asc()).first()
 
             if host:
                 app.logger.info('Running playbook %s against host: %s', host.playbook, host)
-                full_playbook_path = playbook_path + '/' + host.playbook + '.yml'
+                full_playbook_path = f'{playbook_path}/{host.playbook}.yaml'
                 playbook_args = (
                     'ansible-playbook',
                     '-i', inventory_path,
@@ -38,8 +40,7 @@ def main(cli):
             if not cli.args.loop:
                 break
 
-            app.logger.info('loop')
-            sleep(60)
+            sleep(1)
 
 
 if __name__ == "__main__":
