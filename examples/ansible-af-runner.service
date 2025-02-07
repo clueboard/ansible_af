@@ -1,5 +1,5 @@
 [Unit]
-Description=Ansible AF HTTP Service
+Description=Ansible AF Runner
 After=network.target
 
 [Service]

@@ -52,7 +52,7 @@ def readiness_probe():
 
     get_random_row()
 
-    return 'Ready to serve!'
+    return 'Ready to serve!\n'
 
 
 @app.route('/register/<playbook>')
