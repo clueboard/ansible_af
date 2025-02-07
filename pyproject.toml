@@ -11,6 +11,7 @@ authors = [
 ]
 dependencies = [
     "ansible",
+    "ansible_runner",
     "flask",
     "flask-sqlalchemy",
     "gunicorn",

@@ -1,0 +1,15 @@
+[Unit]
+Description=Ansible AF HTTP Service
+After=network.target
+
+[Service]
+Environment=ANSIBLE_PATH=/etc/ansible
+Environment=ANSIBLE_AF_ALLOWLIST="armbian_first_boot"
+Environment=ANSIBLE_AF_DENYLIST=""
+Environment=PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/srv/ansible_af/bin"
+ExecStart=/srv/ansible_af/bin/ansible-af-gunicorn
+WorkingDirectory=/srv/ansible_af/
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

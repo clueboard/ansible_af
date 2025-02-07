@@ -20,7 +20,13 @@ def main(cli):
             ).order_by(Hosts.registered_at.asc()).first()
 
             if host:
-                app.logger.info('Running playbook %s against host: %s', host.playbook, host)
+                cli.log.info('Running playbook %s against host: %s', host.playbook, host)
+
+                # Increment the attempt count
+                host.playbook_attempts += 1
+                db.session.commit()
+
+                # Run the playbook
                 full_playbook_path = f'{playbook_path}/{host.playbook}.yaml'
                 playbook_args = (
                     'ansible-playbook',
@@ -37,7 +43,20 @@ def main(cli):
                     host.playbook_complete = True
 
                     db.session.commit()
-                    app.logger.info('Marked %s as completed', host)
+                    cli.log.info('Marked %s as completed', host)
+
+                elif host.playbook_attempts > 2:
+                    cli.log.info('Too many errors for %s, marking as completed!', host)
+                    host.playbook_complete = True
+
+                else:
+                    cli.log.info(
+                        'Encountered error on host %s for playbook %s, waiting %s seconds...',
+                        host.hostname,
+                        host.playbook,
+                        host_prep_wait_time
+                    )
+                    host.registered_at = datetime.utcnow()
 
             if not cli.args.loop:
                 break
