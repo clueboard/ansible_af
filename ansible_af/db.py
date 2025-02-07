@@ -41,6 +41,7 @@ def upsert_host(ip, macaddr=None, hostname=None, playbook=None, register=False):
 
     if existing_host:
         existing_host.registered_at = datetime.utcnow() if register else None
+        existing_host.playbook_attempts = 0
         existing_host.playbook_complete = False
 
         if macaddr:
