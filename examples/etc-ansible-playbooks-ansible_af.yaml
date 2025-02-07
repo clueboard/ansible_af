@@ -1,0 +1,79 @@
+- name: Install ansible_af in a virtual environment
+  hosts: kcontrol
+  become: yes
+
+  tasks:
+    - name: Ensure required packages are installed
+      apt:
+        name:
+          - python3-venv
+          - python3-pip
+          - git
+        state: present
+      tags: dependencies
+
+    - name: Create virtual environment
+      command:
+        cmd: python3 -m venv /srv/ansible_af
+        creates: /srv/ansible_af
+      tags: venv
+
+    - name: Clone ansible_af repository
+      git:
+        repo: "https://github.com/clueboard/ansible_af.git"
+        dest: "/srv/ansible_af/src"
+        update: yes
+      tags: git
+
+    - name: Check if ansible_af is already installed in editable mode
+      command:
+        cmd: /srv/ansible_af/bin/python -m pip show ansible_af
+      register: ansible_af_check
+      failed_when: false
+      changed_when: false
+      tags: install
+
+    - name: Install ansible_af in virtual environment (editable mode)
+      pip:
+        virtualenv: /srv/ansible_af
+        name: "/srv/ansible_af/src"
+        editable: yes
+      when: ansible_af_check.rc != 0
+      tags: install
+
+    - name: Install ansible-af-http.service
+      copy:
+        src: "/srv/ansible_af/src/examples/ansible-af-http.service"
+        dest: "/etc/systemd/system/ansible-af-http.service"
+        owner: root
+        group: root
+        mode: '0644'
+      tags: service
+
+    - name: Install ansible-af-runner.service
+      copy:
+        src: "/srv/ansible_af/src/examples/ansible-af-runner.service"
+        dest: "/etc/systemd/system/ansible-af-runner.service"
+        owner: root
+        group: root
+        mode: '0644'
+      tags: service
+
+    - name: Reload systemd to apply new services
+      systemd:
+        daemon_reload: yes
+      tags: service
+
+    - name: Enable and start ansible-af-http.service
+      systemd:
+        name: ansible-af-http.service
+        enabled: yes
+        state: started
+      tags: service
+
+    - name: Enable and start ansible-af-runner.service
+      systemd:
+        name: ansible-af-runner.service
+        enabled: yes
+        state: started
+      tags: service

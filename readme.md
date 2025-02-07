@@ -28,23 +28,23 @@ To use the Ansible Armbian Firstboot Server, you must have:
 
 ### Install The Servers
 
-To install the server to `/srv/ansible_af`, use the following command:
+First, customize the playbook in `examples/etc-ansible-playbooks-ansible_af.yaml` if you want to change the defaults.
+
+Install the service using ansible:
 
 ```bash
-sudo python3 -m venv /srv/ansible_af
-sudo /srv/ansible_af/bin/pip install ansible_af
+ansible-playbook -i /etc/ansible/hosts examples/etc-ansible-playbooks-ansible_af.yaml
 ```
 
 You can use another location if you prefer.
 
-### Start the services (systemd)
+### Customize the service configuration
 
-There are systemd unit files in [examples](examples/) you can use to install the HTTP server and the Runner. If you'd like to customize the location of Ansible or change other settings, you can edit the files and change the `Environment=` lines.
+Systemd unit files will be installed in `/etc/systemd/system`. If you'd like to customize the location of Ansible or change other settings, you can edit the files and change the `Environment=` lines. Make sure to reload and restart when you're done:
 
 ```
-sudo cp examples/*.service /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable --now ansible-af-http ansible-af-runner
+sudo systemctl restart ansible-af-http ansible-af-runner
 ```
 
 ## Usage
@@ -70,12 +70,11 @@ These steps require an SD card, USB drive, or another block device. You must per
     * `dd conv=sparse if=/dev/sda of=Armbian_24.11.1_Rpi4b_bookworm_current_6.6.60_MY_ARMBIAN_AF_IMAGE.img.xz bs=4k`
 8. Boot your machine from the drive you just made and watch it automagically boot and configure itself
 
-
 ## Contributing
 
-Please review our [Code of Conduct](code_of_conduct.md) before contributing.
+Contributions are welcome! Fork the repository and create a pull request with your changes.
 
-Contributions are welcome! Please fork the repository and create a pull request with your changes.
+Please review our [Code of Conduct](code_of_conduct.md) before contributing.
 
 ## License
 
