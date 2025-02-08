@@ -19,6 +19,12 @@ dependencies = [
     "milc",
 ]
 
+[project.optional-dependencies]
+testing = [
+    "pytest",
+    "pytest-cov"
+]
+
 [tool.setuptools]
 packages = ["ansible_af"]
 
