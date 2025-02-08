@@ -7,6 +7,7 @@ Environment=ANSIBLE_PATH=/etc/ansible
 Environment=ANSIBLE_AF_HOST_WAIT=30
 Environment=PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/srv/ansible_af/bin"
 Environment=ANSIBLE_HOST_KEY_CHECKING=False
+Environment=ANSIBLE_AF_SSH_USERNAME=
 ExecStart=/srv/ansible_af/bin/ansible-af-runner --loop
 WorkingDirectory=/srv/ansible_af/
 Restart=on-failure

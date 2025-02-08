@@ -26,6 +26,8 @@ To use the Ansible Armbian Firstboot Server, you must have:
    * These should be located in `/etc/ansible/playbooks/tempates/`
 4. Built one or more [Ansible Playbooks](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_intro.html) for configuring your system
 
+**IMPORTANT NOTE**: The name of the First Boot Configuration Template (minus the .j2 extension) must match the name of the Ansible Playbook (minus the .yaml extension) and these both must match the `<config_template>` you supply in the `PRESET_CONFIGURATION` URL. By default this is `armbian_first_boot`, so you would have `/etc/ansible/playbooks/armbian_first_boot.yaml` and `/etc/ansible/playbooks/template/armbian_first_boot.j2`.
+
 ### Install The Servers
 
 First, customize the playbook in `examples/etc-ansible-playbooks-ansible_af.yaml` if you want to change the defaults.
@@ -47,7 +49,23 @@ sudo systemctl daemon-reload
 sudo systemctl restart ansible-af-http ansible-af-runner
 ```
 
-## Usage
+## Configuration
+
+Ansible AF is configured through environment variables. You can also set variables supported by `ansible-playbook` and they will be passed through.
+
+| Variable Name | Default Value | Description |
+|---------------|---------------|-------------|
+| `ANSIBLE_PATH` | `/etc/ansible` | The base path where ansible files are located |
+| `ANSIBLE_INVENTORY_PATH` | `$ANSIBLE_PATH/hosts` | The path to the ansible inventory |
+| `ANSIBLE_PLAYBOOK_PATH` | `$ANSIBLE_PATH/playbooks` | The path to the ansible playbooks |
+| `ANSIBLE_AF_TEMPLATE_DIR` | `$ANSIBLE_PLAYBOOK_PATH/templates` | The path to ansible tempate files |
+| `ANSIBLE_AF_ALLOWLIST` | `armbian_first_boot*` | Templates allowed to be rendered. Can supply a comma separated list. Shell style wildcards (`*`, `?`, `[a-z]`) supported. |
+| `ANSIBLE_AF_DENYLIST` | | Templates disallowed from rendering. Same format as `ANSIBLE_AF_ALLOWLIST`, takes precedence. |
+| `ANSIBLE_AF_HOST_WAIT` | `30` | Minimum time to wait between host registration and running the playbook. |
+| `ANSIBLE_AF_HOST_IP_KEY` | `cluster_ip` | This key will be used to match a registration to the ansible inventory. It must exist in your inventory and match the IP the registration request comes from. |
+| `ANSIBLE_AF_SSH_USERNAME` | | The ssh username to connect as when running the playbook. Defaults to the user running `armbian-af-runner`. |
+
+## Armbian Image Preparation
 
 These steps require an SD card, USB drive, or another block device. You must perform them on Linux. You will not be able to mount the filesystem on Windows or macOS.
 
