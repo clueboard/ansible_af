@@ -1,4 +1,6 @@
 import os
+from fnmatch import fnmatch
+
 from flask import abort, request
 from jinja2 import Environment, FileSystemLoader
 
@@ -22,14 +24,24 @@ def render_template(template_name, context):
     return template.render(context)
 
 
+def wildcard_match(input_string: str, match_list) -> bool:
+    """Returns True if input_string matches any pattern in the hardcoded list."""
+    return any(fnmatch(input_string, pattern) for pattern in match_list)
+
+
 def is_render_permitted(filename):
+    """Returns true if ansible_af is allowed to render this file.
+
+    Listings on the denylist take precedence over listings on the allowlist.
+    Listings are allowed to use shell-style wildcards.
+    """
     if not allowlist and not denylist:
         return True
 
-    if filename in denylist:
+    if wildcard_match(filename, denylist):
         return False
 
-    if filename in allowlist:
+    if wildcard_match(filename, allowlist):
         return True
 
     return False
