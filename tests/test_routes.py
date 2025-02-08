@@ -1,7 +1,7 @@
 import pytest
-import os
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from ansible_af.flask_app import app
+
 
 @pytest.fixture
 def client():
@@ -25,6 +25,7 @@ def test_readiness_probe(client):
         assert rv.status_code == 200
         assert b'Ready to serve!\n' in rv.data
 
+
 def test_register_first_boot(client):
     with patch('ansible_af.routes.find_host_by_ip') as mock_find_host_by_ip, \
          patch('ansible_af.routes.is_render_permitted') as mock_is_render_permitted, \
@@ -36,6 +37,7 @@ def test_register_first_boot(client):
         mock_is_render_permitted.return_value = True
         mock_exists.side_effect = lambda path: True
         mock_render_template.return_value = 'Rendered Template'
+        assert mock_upsert_host
 
         rv = client.get('/register/test_playbook')
         assert rv.status_code == 200
