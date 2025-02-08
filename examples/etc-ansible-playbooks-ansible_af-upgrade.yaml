@@ -1,24 +1,26 @@
-- name: Update ansible_af to the latest version
+---
+- name: Upgrade ansible_af
   hosts: kcontrol
   become: yes
-
   tasks:
-    - name: Fetch the latest code from GitHub
+    - name: Update ansible_af repository
       git:
         repo: "https://github.com/clueboard/ansible_af.git"
         dest: "/srv/ansible_af/src"
         update: yes
-        force: yes
+      register: git_update
       tags: git
 
     - name: Restart ansible-af-http.service
       systemd:
         name: ansible-af-http.service
         state: restarted
+      when: git_update.changed
       tags: service
 
     - name: Restart ansible-af-runner.service
       systemd:
         name: ansible-af-runner.service
         state: restarted
+      when: git_update.changed
       tags: service
