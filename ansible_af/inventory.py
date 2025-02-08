@@ -2,7 +2,7 @@ from ansible.parsing.dataloader import DataLoader
 from ansible.inventory.manager import InventoryManager
 from ansible.vars.manager import VariableManager
 
-from .config import inventory_path
+from .config import inventory_path, host_ip_key
 
 # Load the inventory
 loader = DataLoader()
@@ -12,9 +12,9 @@ variable_manager = VariableManager(loader=loader, inventory=inventory)
 
 def find_host_by_ip(ip):
     for host in inventory.hosts.values():
-        upstream_ip = host.vars.get('upstream_ip')
+        host_ip = host.vars.get(host_ip_key)
 
-        if ip == upstream_ip:
+        if ip == host_ip:
             return variable_manager.get_vars(host=host)
 
     return None
