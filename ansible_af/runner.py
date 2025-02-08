@@ -4,7 +4,7 @@ from time import sleep
 from milc import cli
 
 from .flask_app import app
-from .config import host_prep_wait_time, inventory_path, playbook_path
+from .config import host_prep_wait_time, inventory_path, playbook_path, ssh_username
 from .db import db, Hosts
 
 
@@ -28,14 +28,19 @@ def main(cli):
 
                 # Run the playbook
                 full_playbook_path = f'{playbook_path}/{host.playbook}.yaml'
-                playbook_args = (
+                playbook_args = [
                     'ansible-playbook',
                     '-i',
                     inventory_path,
                     '-l',
                     host.hostname,
-                    full_playbook_path,
-                )
+                ]
+
+                if ssh_username:
+                    playbook_args.extend(['-u', ssh_username])
+
+                playbook_args.append(full_playbook_path)
+
                 playbook_result = cli.run(playbook_args, capture_output=False)
 
                 if playbook_result.returncode == 0:

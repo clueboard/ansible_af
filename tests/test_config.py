@@ -77,7 +77,7 @@ def test_allowlist(monkeypatch):
 
 def test_default_allowlist(monkeypatch):
     importlib.reload(ansible_af.config)
-    assert ansible_af.config.allowlist == ['armbian_first_boot']
+    assert ansible_af.config.allowlist == ['armbian_first_boot*']
 
 def test_denylist(monkeypatch):
     monkeypatch.setenv('ANSIBLE_AF_DENYLIST', 'test1,test2')
@@ -98,3 +98,13 @@ def test_host_prep_wait_time(monkeypatch):
 def test_default_host_prep_wait_time(monkeypatch):
     importlib.reload(ansible_af.config)
     assert ansible_af.config.host_prep_wait_time == 30
+
+def test_ssh_username(monkeypatch):
+    monkeypatch.setenv('ANSIBLE_AF_SSH_USERNAME', 'fred')
+    importlib.reload(ansible_af.config)
+    monkeypatch.delenv('ANSIBLE_AF_SSH_USERNAME', raising=False)
+    assert ansible_af.config.ssh_username == 'fred'
+
+def test_default_host_prep_wait_time(monkeypatch):
+    importlib.reload(ansible_af.config)
+    assert ansible_af.config.ssh_username == None

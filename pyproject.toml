@@ -21,6 +21,7 @@ dependencies = [
 
 [project.optional-dependencies]
 testing = [
+    "flake8",
     "pytest",
     "pytest-cov"
 ]

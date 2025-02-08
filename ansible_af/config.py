@@ -8,3 +8,4 @@ allowlist = environ.get('ANSIBLE_AF_ALLOWLIST', 'armbian_first_boot*').split(','
 denylist = environ.get('ANSIBLE_AF_DENYLIST', '').split(',')
 host_prep_wait_time = int(environ.get('ANSIBLE_AF_HOST_WAIT', '30'))
 host_ip_key = environ.get('ANSIBLE_AF_HOST_IP_KEY', 'cluster_ip')
+ssh_username = environ.get('ANSIBLE_AF_SSH_USERNAME', None)
