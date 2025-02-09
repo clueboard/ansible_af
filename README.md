@@ -10,9 +10,10 @@ Ansible AF is a server to automate the first boot configuration of Armbian serve
     * `PRESET_CONFIGURATION="http://<server_ip>:<port>/register/<config_template>"`
 2. Flash and boot your device with your custom image
 3. Your device will request a DHCP address
-    a. (optional) Your DHCP server will register the host's mac address
+    * (optional) Your DHCP server will register the host's mac address, allowing you to use dynamic DHCP IPs for first boot and static IPs after that
 4. When the first boot is complete, Armbian will register with Ansible AF to get a first boot configuration
-5. Armbian AF will run the configured Ansible Playbook(s) against the host
+5. Armbian will apply the first boot configuration, including a static network configuration
+6. Armbian AF will run the configured Ansible Playbook(s) against the host
 
 ## Installation
 
