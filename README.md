@@ -1,6 +1,6 @@
 # Ansible AF
 
-Ansible Armbian Firstboot Server 
+Ansible Armbian Firstboot Server
 
 Ansible AF is a server to automate the first boot configuration of Armbian servers using Armbian's [Automatic First Boot Configuration](https://docs.armbian.com/User-Guide_Autoconfig/) and [Ansible](https://docs.ansible.com/).
 
@@ -26,6 +26,7 @@ To use the Ansible Armbian Firstboot Server, you must have:
 3. Built one or more [Armbian First Boot Configuariton Templates](https://docs.armbian.com/User-Guide_Autoconfig/)
    * These should be located in `/etc/ansible/playbooks/tempates/`
 4. Built one or more [Ansible Playbooks](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_intro.html) for configuring your system
+   * These should be located in `/etc/ansible/playbooks/`
 
 **IMPORTANT NOTE**: The name of the First Boot Configuration Template (minus the .j2 extension) must match the name of the Ansible Playbook (minus the .yaml extension) and these both must match the `<config_template>` you supply in the `PRESET_CONFIGURATION` URL. By default this is `armbian_first_boot`, so you would have `/etc/ansible/playbooks/armbian_first_boot.yaml` and `/etc/ansible/playbooks/template/armbian_first_boot.j2`.
 
@@ -41,6 +42,14 @@ ansible-playbook -i /etc/ansible/hosts examples/etc-ansible-playbooks-ansible_af
 
 You can use another location if you prefer.
 
+#### Upgrading
+
+If you already have Armbian AF installed, you can upgrade it to the latest version from git using the upgrade playbook:
+
+```bash
+ansible-playbook -i /etc/ansible/hosts examples/etc-ansible-playbooks-ansible_af-upgrade.yaml
+```
+
 ### Customize the service configuration
 
 Systemd unit files will be installed in `/etc/systemd/system`. If you'd like to customize the location of Ansible or change other settings, you can edit the files and change the `Environment=` lines. Make sure to reload and restart when you're done:
@@ -52,7 +61,7 @@ sudo systemctl restart ansible-af-http ansible-af-runner
 
 ## Configuration
 
-Ansible AF is configured through environment variables. You can also set variables supported by `ansible-playbook` and they will be passed through.
+Ansible AF is configured through environment variables. You can also set variables [supported by Ansible](https://docs.ansible.com/ansible/latest/reference_appendices/config.html#environment-variables) and they will be passed through.
 
 | Variable Name | Default Value | Description |
 |---------------|---------------|-------------|
