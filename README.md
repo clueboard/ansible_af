@@ -93,7 +93,7 @@ These steps require an SD card, USB drive, or another block device. You must per
 
 Contributions are welcome! Fork the repository and create a pull request with your changes.
 
-Please review our [Code of Conduct](code_of_conduct.md) before contributing.
+Please review our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
 
 ## License
 
